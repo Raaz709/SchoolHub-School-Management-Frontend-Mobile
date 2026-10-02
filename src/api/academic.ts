@@ -24,8 +24,11 @@ export interface Subject {
   Name: string;
   Code: string;
   TeacherId: number | null;
-  /** Joined in by the API so the teacher module can show ownership directly. */
-  TeacherName: string | null;
+  /**
+   * Joined in by `GET /api/academic/subjects` so the teacher module can show
+   * ownership directly. The per-class listing does not select it, hence optional.
+   */
+  TeacherName?: string | null;
 }
 
 export function fetchClasses(signal?: AbortSignal): Promise<ClassItem[]> {
