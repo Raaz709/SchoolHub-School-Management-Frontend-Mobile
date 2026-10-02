@@ -12,6 +12,7 @@ import { theme } from '../theme';
 
 import { OverviewScreen } from '../screens/overview/OverviewScreen';
 import { ProfileScreen } from '../screens/profile/ProfileScreen';
+import { StudentsScreen } from '../screens/students/StudentsScreen';
 
 /**
  * Route table. Each entry maps a drawer id to the screen that implements it;
@@ -20,6 +21,7 @@ import { ProfileScreen } from '../screens/profile/ProfileScreen';
  */
 const SCREENS: Partial<Record<RouteId, React.ComponentType>> = {
   overview: OverviewScreen,
+  students: StudentsScreen,
   profile: ProfileScreen,
 };
 
