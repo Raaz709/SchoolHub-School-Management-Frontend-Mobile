@@ -1,0 +1,75 @@
+/**
+ * Colour tokens mirrored 1:1 from the web client's `index.css` `@theme` block,
+ * so the mobile app renders the same palette as the SchoolHub website.
+ */
+export const colors = {
+  ink: {
+    900: '#0f172a',
+    700: '#334155',
+    600: '#475569',
+    500: '#64748b',
+    400: '#94a3b8',
+    300: '#cbd5e1',
+  },
+  line: '#e9edf2',
+  lineSoft: '#f2f5f9',
+  canvas: '#f4f7fa',
+  mint: {
+    50: '#f2fbf0',
+    100: '#e3f7dd',
+    200: '#c8eebf',
+    300: '#a8e39a',
+    400: '#86d677',
+    500: '#5cc14c',
+    600: '#3fa336',
+    700: '#358a2d',
+  },
+  rose: {
+    50: '#fdf2f2',
+    100: '#fce7e7',
+    200: '#f9cbcb',
+    300: '#f5a5a5',
+    400: '#f07a7a',
+    500: '#ea5a5a',
+    600: '#dc3a3a',
+  },
+  amber: {
+    50: '#fffbeb',
+    100: '#fef3c7',
+    200: '#fde68a',
+    300: '#fcd34d',
+    400: '#fbbf24',
+    500: '#f59e0b',
+  },
+  blue: {
+    50: '#eff6ff',
+    100: '#dbeafe',
+    200: '#bfdbfe',
+    300: '#93c5fd',
+    400: '#60a5fa',
+    500: '#3b82f6',
+  },
+  violet: {
+    50: '#f5f3ff',
+    100: '#ede9fe',
+    200: '#ddd6fe',
+    300: '#c4b5fd',
+    400: '#a78bfa',
+    500: '#8b5cf6',
+  },
+  sky: {
+    50: '#f0f9ff',
+    100: '#e0f2fe',
+    200: '#bae6fd',
+    300: '#7dd3fc',
+    400: '#38bdf8',
+    500: '#0ea5e9',
+  },
+  white: '#ffffff',
+  transparent: 'transparent',
+  overlay: 'rgba(15, 23, 42, 0.3)',
+  shadow: 'rgba(15, 23, 42, 0.25)',
+  shadowSoft: 'rgba(15, 23, 42, 0.1)',
+} as const;
+
+export type Colors = typeof colors;
