@@ -17,6 +17,7 @@ import { TeachersScreen } from '../screens/teachers/TeachersScreen';
 import { AcademicsScreen } from '../screens/academics/AcademicsScreen';
 import { TimetableScreen } from '../screens/timetable/TimetableScreen';
 import { AttendanceScreen } from '../screens/attendance/AttendanceScreen';
+import { ExamsScreen } from '../screens/exams/ExamsScreen';
 
 /**
  * Route table. Each entry maps a drawer id to the screen that implements it;
@@ -30,6 +31,7 @@ const SCREENS: Partial<Record<RouteId, React.ComponentType>> = {
   academics: AcademicsScreen,
   timetable: TimetableScreen,
   attendance: AttendanceScreen,
+  exams: ExamsScreen,
   profile: ProfileScreen,
 };
 
