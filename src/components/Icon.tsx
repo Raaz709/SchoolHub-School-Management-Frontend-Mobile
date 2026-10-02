@@ -130,6 +130,8 @@ const IONICONS = {
   idCard: 'id-card-outline',
   notificationsOff: 'notifications-off-outline',
   checkmarkCircle: 'checkmark-circle-outline',
+  userRemove: 'person-remove-outline',
+  userAdd: 'person-add-outline',
 } satisfies Record<string, IoniconGlyph>;
 
 const FEATHER_NAMES = Object.keys(FEATHER) as (keyof typeof FEATHER)[];
