@@ -17,8 +17,9 @@ import {
   fetchUnreadCount,
   onNotificationsChanged,
 } from '../../api/notifications';
-import { fetchAnnouncements } from '../../api/announcements';
+import { fetchAnnouncements, type Announcement } from '../../api/announcements';
 import { searchStudents, type Student } from '../../api/students';
+import type { RouteId } from '../../navigation/types';
 import { commonStyles, theme } from '../../theme';
 import { Icon } from '../Icon';
 import { Modal } from '../common/Modal';
@@ -163,6 +164,8 @@ export function TopBar() {
  * Search sheet behind the top-bar field. Mirrors a real backend read rather than
  * a decorative input: staff query the student roster, everyone can match
  * announcements they are allowed to see.
+ *
+ * Results are actionable — a tap closes the sheet and opens the owning page.
  */
 function GlobalSearch({
   visible,
@@ -173,19 +176,27 @@ function GlobalSearch({
   role: string | undefined;
   onClose: () => void;
 }) {
+  const { navigate, closeDrawer } = useAppNavigation();
   const [query, setQuery] = useState('');
   const [students, setStudents] = useState<Student[]>([]);
-  const [announcementTitles, setAnnouncementTitles] = useState<string[]>([]);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const canSearchStudents = roleCanSearchStudents(role);
 
+  /** Closes the sheet, then opens the page that owns the tapped result. */
+  const open = (id: RouteId) => {
+    onClose();
+    closeDrawer();
+    navigate(id);
+  };
+
   useEffect(() => {
     if (!visible) {
       setQuery('');
       setStudents([]);
-      setAnnouncementTitles([]);
+      setAnnouncements([]);
       setError(null);
     }
   }, [visible]);
@@ -199,7 +210,7 @@ function GlobalSearch({
       if (trimmed.length < 2) {
         if (!cancelled) {
           setStudents([]);
-          setAnnouncementTitles([]);
+          setAnnouncements([]);
         }
         return;
       }
@@ -208,7 +219,7 @@ function GlobalSearch({
       setError(null);
 
       try {
-        const [studentHits, announcements] = await Promise.all([
+        const [studentHits, allAnnouncements] = await Promise.all([
           canSearchStudents ? searchStudents({ query: trimmed }) : Promise.resolve([]),
           fetchAnnouncements(),
         ]);
@@ -217,11 +228,14 @@ function GlobalSearch({
 
         const needle = trimmed.toLowerCase();
         setStudents(studentHits.slice(0, 12));
-        setAnnouncementTitles(
-          announcements
-            .filter((item) => item.Title.toLowerCase().includes(needle))
-            .slice(0, 8)
-            .map((item) => item.Title),
+        setAnnouncements(
+          allAnnouncements
+            .filter(
+              (item) =>
+                item.Title.toLowerCase().includes(needle) ||
+                item.Content.toLowerCase().includes(needle),
+            )
+            .slice(0, 8),
         );
       } catch (err) {
         if (!cancelled) {
@@ -239,7 +253,7 @@ function GlobalSearch({
   }, [query, visible, canSearchStudents]);
 
   const hasQuery = query.trim().length >= 2;
-  const hasResults = students.length > 0 || announcementTitles.length > 0;
+  const hasResults = students.length > 0 || announcements.length > 0;
 
   return (
     <Modal visible={visible} onClose={onClose} title="Search" subtitle="Students, staff and announcements">
@@ -272,7 +286,13 @@ function GlobalSearch({
           <>
             <Text style={styles.resultHeading}>Students</Text>
             {students.map((student) => (
-              <View key={student.Id} style={styles.resultRow}>
+              <Pressable
+                key={student.Id}
+                onPress={() => open('students')}
+                accessibilityRole="button"
+                accessibilityLabel={`Open student list for ${student.Username}`}
+                style={styles.resultRow}
+              >
                 <Icon name="student" size={16} color={theme.colors.ink[400]} />
                 <View style={styles.resultText}>
                   <Text style={styles.resultTitle}>{student.Username}</Text>
@@ -282,19 +302,32 @@ function GlobalSearch({
                     {student.SectionName ? ` (${student.SectionName})` : ''}
                   </Text>
                 </View>
-              </View>
+                <Icon name="chevronRight" size={15} color={theme.colors.ink[400]} />
+              </Pressable>
             ))}
           </>
         ) : null}
 
-        {announcementTitles.length > 0 ? (
+        {announcements.length > 0 ? (
           <>
             <Text style={styles.resultHeading}>Announcements</Text>
-            {announcementTitles.map((title) => (
-              <View key={title} style={styles.resultRow}>
+            {announcements.map((item) => (
+              <Pressable
+                key={item.Id}
+                onPress={() => open('communicate')}
+                accessibilityRole="button"
+                accessibilityLabel={`Open announcement ${item.Title}`}
+                style={styles.resultRow}
+              >
                 <Icon name="megaphone" size={16} color={theme.colors.ink[400]} />
-                <Text style={styles.resultTitle}>{title}</Text>
-              </View>
+                <View style={styles.resultText}>
+                  <Text style={styles.resultTitle}>{item.Title}</Text>
+                  <Text style={styles.resultMeta} numberOfLines={1}>
+                    {item.Content}
+                  </Text>
+                </View>
+                <Icon name="chevronRight" size={15} color={theme.colors.ink[400]} />
+              </Pressable>
             ))}
           </>
         ) : null}

@@ -26,9 +26,9 @@ import { ReportsScreen } from '../screens/reports/ReportsScreen';
 import { AuditLogsScreen } from '../screens/auditLogs/AuditLogsScreen';
 
 /**
- * Route table. Each entry maps a drawer id to the screen that implements it;
- * anything not listed yet falls back to the ComingSoon panel so the drawer stays
- * navigable while the remaining modules are ported.
+ * Route table mapping each drawer id to its screen. Every route in `RouteId` is
+ * implemented; `ComingSoon` remains only as a guard so an unrecognised id can
+ * never render a blank page.
  */
 const SCREENS: Partial<Record<RouteId, React.ComponentType>> = {
   overview: OverviewScreen,
