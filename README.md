@@ -112,7 +112,7 @@ Legend: done = ported and wired · todo = not yet ported
 | Assignments | Admin, Teacher, Student | done |
 | Fees Collection | Admin | done |
 | Communicate (announcements + inbox) | all | done |
-| Events | all | todo |
+| Events | all | done |
 | Reports | Admin | todo |
 | Audit Logs | Admin | todo |
 | My Profile | all | done |
