@@ -36,7 +36,7 @@ import { Input } from '../../components/common/Input';
 import { Select } from '../../components/common/Select';
 import { Avatar, CountPill, ListPanel, ListRow } from '../../components/common/ListPanel';
 import { Icon } from '../../components/Icon';
-import { initials, todayInput } from '../../lib/format';
+import { initials, toIsoInstant, toLocalInput, todayInput } from '../../lib/format';
 import { theme } from '../../theme';
 
 type Feedback = { tone: 'success' | 'error'; message: string } | null;
@@ -407,7 +407,7 @@ function AssignmentFormModal({
     assignment?.SubjectId ?? subjects[0]?.Id ?? null,
   );
   const [due, setDue] = useState(
-    assignment?.DueDate ? assignment.DueDate.slice(0, 16) : `${todayInput()}T23:59`,
+    assignment?.DueDate ? toLocalInput(assignment.DueDate) : `${todayInput()}T23:59`,
   );
   const [maxScore, setMaxScore] = useState(
     assignment?.MaxScore !== null && assignment?.MaxScore !== undefined
@@ -441,7 +441,7 @@ function AssignmentFormModal({
         SubjectId: subjectId,
         Title: title.trim(),
         Description: description.trim() || null,
-        DueDate: new Date(due).toISOString(),
+        DueDate: toIsoInstant(due),
         MaxScore: maxScoreNum,
         AttachmentUrl: attachmentUrl.trim() || null,
       };

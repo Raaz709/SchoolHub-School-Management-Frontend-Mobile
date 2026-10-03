@@ -83,6 +83,29 @@ export function todayInput(): string {
   return toDateInput(new Date());
 }
 
+/**
+ * `datetime-local` style value (`YYYY-MM-DDTHH:mm`) → a UTC instant, for fields
+ * the API stores as `timestamptz`.
+ *
+ * Always pair with {@link toLocalInput}: the API hands back a UTC instant, so
+ * slicing it would pre-fill the UTC clock while saving re-reads the value as
+ * local time, shifting the stored instant on every edit.
+ */
+export function toIsoInstant(localValue: string): string {
+  return new Date(localValue).toISOString();
+}
+
+/** A stored instant → the `YYYY-MM-DDTHH:mm` local value a form should show. */
+export function toLocalInput(iso: string | null | undefined): string {
+  if (!iso) return '';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+  const pad = (value: number) => String(value).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
+    date.getHours(),
+  )}:${pad(date.getMinutes())}`;
+}
+
 /** Percentage helper that never divides by zero. */
 export function percentage(part: number, total: number): number {
   if (!total) return 0;
