@@ -22,6 +22,7 @@ import { AssignmentsScreen } from '../screens/assignments/AssignmentsScreen';
 import { FeesScreen } from '../screens/fees/FeesScreen';
 import { CommunicateScreen } from '../screens/communicate/CommunicateScreen';
 import { EventsScreen } from '../screens/events/EventsScreen';
+import { ReportsScreen } from '../screens/reports/ReportsScreen';
 
 /**
  * Route table. Each entry maps a drawer id to the screen that implements it;
@@ -40,6 +41,7 @@ const SCREENS: Partial<Record<RouteId, React.ComponentType>> = {
   fees: FeesScreen,
   communicate: CommunicateScreen,
   events: EventsScreen,
+  reports: ReportsScreen,
   profile: ProfileScreen,
 };
 
